@@ -4,7 +4,7 @@ def call(Map config = [:]){
   def image_tag = config.image_tag ?: 'latest'
   def severity = config.severity ?: 'HIGH,CRITICAL'
 
-  def safe_name = image_name.replaceAll('/','-')
+  def safeName = image_name.replaceAll('/','-')
   def reportDir = "trivy-reports"
 
   echo "Scanning Image : ${image_name}:${image_tag}"
