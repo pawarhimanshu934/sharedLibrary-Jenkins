@@ -19,9 +19,9 @@ def call(Map config = [:]){
         -v \$(pwd)/${reportDir}:/${reportDir} \
         aquasec/trivy:latest image \
         --format json \
-        --output /${reportDir}/${safeName}-${imageTag}.json \
+        --output /${reportDir}/${safeName}-${image_tag}.json \
         --severity ${severity} \
-        ${imageName}:${imageTag} || true
+        ${image_name}:${image_tag} || true
     """
 
   // Step 3: Generate HTML report
@@ -32,16 +32,16 @@ def call(Map config = [:]){
         aquasec/trivy:latest image \
         --format template \
         --template "@/contrib/html.tpl" \
-        --output /${reportDir}/${safeName}-${imageTag}.html \
+        --output /${reportDir}/${safeName}-${image_tag}.html \
         --severity ${severity} \
-        ${imageName}:${imageTag} || true
+        ${image_name}:${image_tag} || true
     """
 
      // Step 4: Count vulnerabilities
     def vulnCount = sh(
         script: """
-            if [ -f ${reportDir}/${safeName}-${imageTag}.json ]; then
-                grep -c "VulnerabilityID" ${reportDir}/${safeName}-${imageTag}.json || echo 0
+            if [ -f ${reportDir}/${safeName}-${image_tag}.json ]; then
+                grep -c "VulnerabilityID" ${reportDir}/${safeName}-${image_tag}.json || echo 0
             else
                 echo 0
             fi
@@ -49,7 +49,7 @@ def call(Map config = [:]){
         returnStdout: true
     ).trim()
 
-    echo "Total vulnerabilities in ${imageName}:${imageTag} = ${vulnCount}"
+    echo "Total vulnerabilities in ${image_name}:${image_tag} = ${vulnCount}"
 
     return vulnCount
   
