@@ -16,8 +16,8 @@ def call(Map config = [:]) {
         sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin"
 
         // Push
-        sh "docker push \$DOCKER_USERNAME/${image_name}:${image_tag}"
-        sh "docker push \$DOCKER_USERNAME/${image_name}:latest"
+        sh "docker push ${image_name}:${image_tag}"
+        sh "docker push ${image_name}:latest"
 
         // Logout
         sh "docker logout"
