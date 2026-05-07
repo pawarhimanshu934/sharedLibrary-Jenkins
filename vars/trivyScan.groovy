@@ -17,6 +17,7 @@ def call(Map config = [:]){
         docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v \$(pwd)/${reportDir}:/${reportDir} \
+        -v $HOME/.cache/trivy:/root/.cache/trivy \
         aquasec/trivy:latest image \
         --format json \
         --output /${reportDir}/${safeName}-${image_tag}.json \
@@ -29,6 +30,7 @@ def call(Map config = [:]){
         docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v \$(pwd)/${reportDir}:/${reportDir} \
+        -v $HOME/.cache/trivy:/root/.cache/trivy \
         aquasec/trivy:latest image \
         --format template \
         --template "@/contrib/html.tpl" \
