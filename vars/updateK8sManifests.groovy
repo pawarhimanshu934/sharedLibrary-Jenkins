@@ -15,8 +15,8 @@ def call(Map config = [:]){
         eval \$(ssh-agent -s)
         ssh-add \$SSH_KEY
 
-        git config user.name "Jenkins"
-        git config user.email "jenkins@example.com"
+        git config user.name "pawarhimanshu934"
+        git config user.email "pawarhimanshu934@gmail.com"
         
         echo "Updating Image name tags in K8 manifest with latest build number"
         sed -i 's|image: .*easyshop:.*|image: ${app_image}:${image_tag}|g' ${manifest_dir}/04-deployment.yml
@@ -25,6 +25,8 @@ def call(Map config = [:]){
           sed -i 's|image: .*easyshop-migration:.*|image: ${migration_image}:${image_tag}|g' ${manifest_dir}/10-data-migration.yml
         fi
 
+        git remote set-url origin git@github.com:pawarhimanshu934/TWS-ECommerce.git
+        
         git add ./${manifest_dir}/*.yml || true
         git commit -m "kubernetes manifest updated with Build No : ${image_tag}" || echo "No changes to commit"
 
