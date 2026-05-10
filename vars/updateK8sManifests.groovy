@@ -4,13 +4,19 @@ def call(Map config = [:]){
   def image_tag = config.image_tag?: "latest"
   def manifest_dir = config.manifest_dir?: "kubernetes"
 
-  withCredentials([gitUsernamePassword(
-        credentialsId: 'github-credentials',
-        gitToolName: 'Default'
+  withCredentials([sshUserPrivateKey(
+        credentialsId: 'github-ssh',
+        keyFileVariable: 'SSH_KEY'
         
     )]) {
 
         sh """
+
+        eval \$(ssh-agent -s)
+        ssh-add \$SSH_KEY
+
+        git config user.name "Jenkins"
+        git config user.email "jenkins@example.com"
         
         echo "Updating Image name tags in K8 manifest with latest build number"
         sed -i 's|image: .*easyshop:.*|image: ${app_image}:${image_tag}|g' ${manifest_dir}/04-deployment.yml
